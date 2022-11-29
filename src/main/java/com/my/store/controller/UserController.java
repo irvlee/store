@@ -7,10 +7,14 @@ import com.my.store.service.ex.UsernameDuplicatedException;
 import com.my.store.util.JsonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Slf4j
 @RestController
@@ -20,7 +24,7 @@ public class UserController extends BaseController {
     IUserService userService;
 
 
-    @GetMapping("register")
+    @PostMapping("insertuser")
     public JsonResult register(User user){
 //        JsonResult jsonResult = new JsonResult();
 //        try {
@@ -40,6 +44,26 @@ public class UserController extends BaseController {
 
     }
 
+    @PostMapping("login")
+    public JsonResult<User> login(User user, HttpSession session){
+
+        User loginUser = userService.login(user);
+        // 存储数据到session
+        session.setAttribute("uid",loginUser.getUid());
+        session.setAttribute("username",loginUser.getUsername());
+
+        JsonResult<User> objectJsonResult = new JsonResult<>(OK, loginUser);
+        objectJsonResult.setMessage("登录成功！");
+
+        Integer uidFromSession = getUidFromSession(session);
+        String usernameFromSession = getUsernameFromSession(session);
+
+        log.info("uid: {} ------ username:{}",uidFromSession,usernameFromSession);
+
+
+
+        return  objectJsonResult;
+    }
 
 
 

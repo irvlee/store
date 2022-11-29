@@ -36,6 +36,22 @@ public class UserServiceTests {
         }
 
     }
+    @Test
+    public void login(){
+        User user = new User();
+        user.setUsername("zhangs");
+        user.setPassword("123");
+        User loginUser = userService.login(user);
 
+        System.out.println(loginUser);
+
+    }
+
+    @Test
+    public void updatePwd(){
+
+        Integer rows = userService.changePwd(26, "ad", "123456", "123");
+        System.out.println("修成成功：" + rows);
+    }
 
 }

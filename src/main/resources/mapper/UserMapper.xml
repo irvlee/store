@@ -27,5 +27,11 @@
           #{avatar},#{isDelete},#{createdUser},#{createdTime},#{modifiedUser},#{modifiedTime}
         )
     </insert>
+    <select id="findUserById" resultMap="userResult">
+        select * from t_user where uid = #{id}
+    </select>
+    <update id="updatePassword">
+        update t_user set password = #{pwd} where uid = #{id}
+    </update>
 
 </mapper>
